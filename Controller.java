@@ -2,6 +2,7 @@ import java.util.Scanner;
 
 public class Controller {
     public Controller() {
+        Keyboard k = new Keyboard();
         Screen s = new Screen();
         Inventory i = new Inventory();
         Scanner input = new Scanner(System.in);
@@ -18,5 +19,6 @@ public class Controller {
                 i.hide();
             }
         }
+        input.close();
     }
 }

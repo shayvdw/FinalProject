@@ -6,12 +6,13 @@ public class Screen extends JPanel {
     int width = 500;
     int height = 500;
     JFrame frame = new JFrame();
+    Keyboard k = new Keyboard(); 
 
     public Screen() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         frame.add(this);
-
+        frame.addKeyListener(k);
         frame.setResizable(false);
         frame.setFocusable(true);
         frame.setSize(width, height);
