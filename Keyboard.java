@@ -7,20 +7,21 @@ public class Keyboard implements KeyListener {
     }
     @Override
     public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_E){
+        if(e.getKeyChar() == 'e'){
             System.out.println("E");
         }
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-        // This method must be overridden but can be left empty if not used
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_E){
+        if(e.getKeyChar() == 'e'){
             System.out.println("E");
         }
+    }
+
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        // This method must be overridden but can be left empty if not used
     }
 }
