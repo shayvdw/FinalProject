@@ -3,6 +3,7 @@ import java.awt.event.KeyListener;
 
 public class Keyboard implements KeyListener {
 
+    boolean closeInv;
     boolean forward;
     boolean backward;
     boolean left;
@@ -10,11 +11,13 @@ public class Keyboard implements KeyListener {
     boolean inv;
 
     public Keyboard() {
+        closeInv = false;
         forward = false;
         backward = false;
         left = false;   
         right = false;
         inv = false;
+
     }
     @Override
     public void keyPressed(KeyEvent e) {
@@ -28,6 +31,8 @@ public class Keyboard implements KeyListener {
             this.right = !right;
         } else if(e.getKeyChar() == 'i'){
             this.inv = !inv;
+        } else if(e.getKeyChar() == 'e'){
+            this.closeInv = !closeInv;
         }
     }
 

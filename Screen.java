@@ -25,6 +25,7 @@ public class Screen extends JPanel implements Runnable {
     public void startGameThread() {
         Thread display = new Thread(this);
         display.start();
+        i.startInventoryThread();
     }
 
     @Override
@@ -36,22 +37,28 @@ public class Screen extends JPanel implements Runnable {
                 e.printStackTrace();
             }
             if (k.forward) {
-                System.out.println("Forward");
+                // System.out.println("Forward");
+                k.forward = false;
             } else if (k.backward) {
-                System.out.println("Backward");
+                // System.out.println("Backward");
+                k.backward = false;
             } else if (k.left) {
-                System.out.println("Left");
+                // System.out.println("Left");
+                k.left = false;
             } else if (k.right) {
-                System.out.println("Right");
+                // System.out.println("Right");
+                k.right = false;
             } else if (k.inv) {
-                i.show();
-                System.out.println("Inventory is shown");
-            } else if (!k.inv) {
-                i.hide();
-                System.out.println("Inventory is hidden");
+                if (i.alreadyHidden) {
+                    i.show();
+                }else {
+                    i.hide();
+                }
+                k.inv = false;
             }
         }
     }
+
 
     public void BigScreen() {
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
