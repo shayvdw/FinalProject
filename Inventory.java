@@ -5,6 +5,8 @@ public class Inventory extends JPanel {
     int width = 500;
     int height = 300;
     JFrame frame = new JFrame();
+    int[][] inventory;
+    boolean show = false;
 
     public Inventory(){
         frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -15,20 +17,24 @@ public class Inventory extends JPanel {
         frame.setLocationRelativeTo(null); // Center the window on the screen
         frame.setVisible(false);
 
-        int[][] Inventory = new int[4][8];
+        inventory = new int[4][8];
     }
 
     public void hide(){
-        frame.setVisible(false);
+        frame.setVisible(!show);
     }
 
     public void show(){
-        frame.setVisible(true);
+        frame.setVisible(show);
+    }
+
+    public boolean isShown(){
+        return show;
     }
 
     public void paintComponent(Graphics g) {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 4; j++) {
+        for (int i = 0; i < inventory[0].length; i++) {
+            for (int j = 0; j < inventory.length; j++) {
                 g.fillRect(10 + i * 50, 10 + j * 50, 40, 40);
             }
         }
