@@ -33,6 +33,8 @@ public class Keyboard implements KeyListener {
             this.inv = !inv;
         } else if(e.getKeyChar() == 'e'){
             this.closeInv = !closeInv;
+        } else if(e.getKeyChar() == 'q'){
+            System.exit(0);
         }
     }
 

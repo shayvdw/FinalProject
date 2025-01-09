@@ -9,6 +9,7 @@ public class Inventory extends JPanel implements Runnable {
     boolean alreadyHidden;
     boolean alreadyShown;
     Keyboard k = new Keyboard();
+    Mouse m = new Mouse();
     
 
     public Inventory() {
@@ -17,9 +18,10 @@ public class Inventory extends JPanel implements Runnable {
         frame.setResizable(false);
         frame.setFocusable(true);
         frame.setSize(width, height);
-        frame.setLocationRelativeTo(null); // Center the window on the screen
+        frame.setLocationRelativeTo(null);
         frame.setVisible(false);
         frame.addKeyListener(k);
+        frame.addMouseListener(m);
 
         inventory = new int[4][8];
         alreadyHidden = true;
@@ -38,6 +40,7 @@ public class Inventory extends JPanel implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            // System.out.println("x: " + m.x + " y: " + m.y);
             if (k.closeInv && alreadyShown) {
                 hide();
                 k.closeInv = false;
