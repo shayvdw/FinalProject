@@ -2,13 +2,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-public class Mouse implements MouseListener, MouseMotionListener {
+public class MapMouse implements MouseListener, MouseMotionListener {
 
     boolean clicked;
     int x;
     int y;
 
-    public Mouse() {
+    public MapMouse() {
         clicked = false;
     }
 

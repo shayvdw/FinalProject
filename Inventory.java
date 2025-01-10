@@ -1,32 +1,42 @@
 import javax.swing.*;
 import java.awt.Graphics;
+import java.awt.GridLayout;
 
 public class Inventory extends JPanel implements Runnable {
     int width = 500;
     int height = 300;
     JFrame frame = new JFrame();
-    int[][] inventory;
-    boolean alreadyHidden;
-    boolean alreadyShown;
+    
+    InventorySquare[][] inventory = new InventorySquare[8][4];
+    boolean alreadyHidden = true;
+    boolean alreadyShown = false;
     Keyboard k = new Keyboard();
-    Mouse m = new Mouse();
+    InvMouse m = new InvMouse();
     
 
     public Inventory() {
+        this.setLayout(new GridLayout(8, 4));
+        frame.setLayout(null);
+        this.setBounds(0, 0, width, height);
+        for (int i = 0; i < inventory.length; i++) {
+            for (int j = 0; j < inventory[0].length; j++) {
+                inventory[i][j] = new InventorySquare(10 + i * 50, 10 + j * 50);
+                this.add(inventory[i][j]);
+            }
+        }
+
         frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         frame.add(this);
+        
+
         frame.setResizable(false);
         frame.setFocusable(true);
         frame.setSize(width, height);
         frame.setLocationRelativeTo(null);
-        frame.setVisible(false);
+
         frame.addKeyListener(k);
         frame.addMouseListener(m);
-
-        inventory = new int[4][8];
-        alreadyHidden = true;
-        alreadyShown = false;
-
+        frame.addMouseMotionListener(m);
     }
     public void startInventoryThread() {
         Thread inventoryThread = new Thread(this);
@@ -40,7 +50,6 @@ public class Inventory extends JPanel implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            // System.out.println("x: " + m.x + " y: " + m.y);
             if (k.closeInv && alreadyShown) {
                 hide();
                 k.closeInv = false;
@@ -65,9 +74,9 @@ public class Inventory extends JPanel implements Runnable {
     }
 
     public void paintComponent(Graphics g) {
-        for (int i = 0; i < inventory[0].length; i++) {
-            for (int j = 0; j < inventory.length; j++) {
-                g.fillRect(10 + i * 50, 10 + j * 50, 40, 40);
+        for (InventorySquare[] invSpots : inventory) {
+            for (InventorySquare invSpot : invSpots) {
+                g.fillRect(invSpot.getSpotX(), invSpot.getSpotY(), 40, 40);
             }
         }
     }
