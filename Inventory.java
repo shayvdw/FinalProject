@@ -11,8 +11,7 @@ public class Inventory extends JPanel implements Runnable {
     boolean alreadyHidden = true;
     boolean alreadyShown = false;
     Keyboard k = new Keyboard();
-    InvMouse m = new InvMouse();
-    
+    InvMouse mouse = new InvMouse();
 
     public Inventory() {
         this.setLayout(new GridLayout(8, 4));
@@ -27,7 +26,7 @@ public class Inventory extends JPanel implements Runnable {
 
         frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         frame.add(this);
-        
+        frame.setUndecorated(true);
 
         frame.setResizable(false);
         frame.setFocusable(true);
@@ -35,8 +34,8 @@ public class Inventory extends JPanel implements Runnable {
         frame.setLocationRelativeTo(null);
 
         frame.addKeyListener(k);
-        frame.addMouseListener(m);
-        frame.addMouseMotionListener(m);
+        frame.addMouseListener(mouse);
+        frame.addMouseMotionListener(mouse);
     }
     public void startInventoryThread() {
         Thread inventoryThread = new Thread(this);
@@ -53,6 +52,16 @@ public class Inventory extends JPanel implements Runnable {
             if (k.closeInv && alreadyShown) {
                 hide();
                 k.closeInv = false;
+            } else if (mouse.clicked){
+                // System.out.println("Mouse clicked at: " + mouse.x + ", " + mouse.y);
+                for (InventorySquare[] inventorySquares : inventory) {
+                    for (InventorySquare inventorySquare : inventorySquares) {
+                        if (inventorySquare.getSpotX() < mouse.x && inventorySquare.getSpotX() + 40 > mouse.x && inventorySquare.getSpotY() < mouse.y && inventorySquare.getSpotY() + 40 > mouse.y) {
+                            System.out.println("Clicked on inventory square at: " + ((inventorySquare.getSpotY()-10)/50) + ", " + ((inventorySquare.getSpotX()-10)/50));
+                        }
+                    }
+                }
+                mouse.clicked = false;
             }
         }
     }

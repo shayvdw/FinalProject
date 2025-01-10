@@ -9,6 +9,7 @@ public class Keyboard implements KeyListener {
     boolean left;
     boolean right;
     boolean inv;
+    boolean fullScreen;
 
     public Keyboard() {
         closeInv = false;
@@ -17,6 +18,7 @@ public class Keyboard implements KeyListener {
         left = false;   
         right = false;
         inv = false;
+        fullScreen = false;
 
     }
     @Override
@@ -35,6 +37,8 @@ public class Keyboard implements KeyListener {
             this.closeInv = !closeInv;
         } else if(e.getKeyChar() == 'q'){
             System.exit(0);
+        } else if(e.getKeyChar() == 'f'){
+            this.fullScreen = !fullScreen;
         }
     }
 

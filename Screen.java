@@ -8,16 +8,22 @@ public class Screen extends JPanel implements Runnable {
     JFrame frame = new JFrame();
     Keyboard k = new Keyboard();
     Inventory i = new Inventory();
+    MapMouse mouse = new MapMouse();
 
     public Screen() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        frame.setUndecorated(true);
+        frame.setLocationRelativeTo(null);
 
         frame.add(this);
         frame.addKeyListener(k);
+        frame.addMouseListener(mouse);
+        frame.addMouseMotionListener(mouse);
+
         frame.setResizable(false);
         frame.setFocusable(true);
         frame.setSize(width, height);
-
         frame.setVisible(true);
 
     }
@@ -55,6 +61,13 @@ public class Screen extends JPanel implements Runnable {
                     i.hide();
                 }
                 k.inv = false;
+            } else if (k.fullScreen) {
+                if (frame.getExtendedState() == JFrame.MAXIMIZED_BOTH) {
+                    SmallScreen();
+                } else {
+                    BigScreen();
+                }
+                k.fullScreen = false;
             }
         }
     }

@@ -15,13 +15,12 @@ public class InvMouse implements MouseListener, MouseMotionListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         clicked = !clicked;
-        e.getX();
-        e.getY();
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-
+        x = e.getX();
+        y = e.getY();
     }
 
     @Override
