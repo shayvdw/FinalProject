@@ -3,6 +3,9 @@ import javax.swing.*;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.io.File;
+import java.io.PrintWriter;
+import java.util.Scanner;
 
 public class Inventory extends JPanel implements Runnable {
     int width = 450;
@@ -12,7 +15,6 @@ public class Inventory extends JPanel implements Runnable {
 
     InventorySquare[][] inventory = new InventorySquare[8][4];
     InventorySquare foundSquare;
-    InventorySquare transferSquare;
 
     Item heldItem;
 
@@ -27,10 +29,23 @@ public class Inventory extends JPanel implements Runnable {
         this.setLayout(new GridLayout(8, 4));
         frame.setLayout(null);
         this.setBounds(0, 0, width, height);
+        Scanner input = null;
+        try{
+            input = new Scanner(new File("SaveFile.csv"));
+            input.nextLine();
+        } catch(Exception e){
+            e.printStackTrace();
+        }
         for (int i = 0; i < inventory.length; i++) {
             for (int j = 0; j < inventory[0].length; j++) {
-                inventory[i][j] = new InventorySquare(10 + i * (width / inventory.length),
-                        10 + j * (height / inventory[0].length));
+                String dataline = input.nextLine();
+                String[] data = dataline.split(",");
+                int xPos = Integer.parseInt(data[0]);
+                int yPos = Integer.parseInt(data[1]);
+                int id = Integer.parseInt(data[2]);
+                int width = Integer.parseInt(data[3]);
+                int height = Integer.parseInt(data[4]);
+                inventory[i][j] = new InventorySquare(xPos,yPos,id,width,height);
                 this.add(inventory[i][j]);
             }
         }
@@ -74,29 +89,28 @@ public class Inventory extends JPanel implements Runnable {
                     heldItem.setSquare(null);
                     hasFound = true;
                     mouse.clicked = false;
-                    System.out.println(foundSquare.getX() + ", " + foundSquare.getY());
                 }
             } else if (mouse.clicked && hasFound) {
-                transferSquare = findSquare(mouse.x, mouse.y);
+                InventorySquare transferSquare = findSquare(mouse.x, mouse.y);
                 if (transferSquare != null && transferSquare != foundSquare) {
-                    System.out.println(foundSquare.getX() + ", " + foundSquare.getY());
-                    System.out.println("transefer" + transferSquare.getX() + ", " + transferSquare.getY());
                     Item temp = transferSquare.sprite;
                     heldItem.clicked();
                     heldItem.setSquare(transferSquare);
                     transferSquare.setItem(heldItem);
-                    heldItem = temp;
-                    heldItem.clicked();
-                    heldItem.setSquare(null);
+                    temp.setSquare(foundSquare);
+                    temp.updateItem();
+                    heldItem.updateItem();
+                    foundSquare.setItem(temp);
+                    heldItem = null;
+                    foundSquare = null;
                 } else {
-                    System.out.println(foundSquare.getX() + ", " + foundSquare.getY());
                     heldItem.clicked();
                     heldItem.setSquare(foundSquare);
                     heldItem.updateItem();
                     foundSquare.setItem(heldItem);
                     heldItem = null;
-                    hasFound = false;
                 }
+                hasFound = false;
                 mouse.clicked = false;
                 repaint();
             } else if (hasFound) {
@@ -111,6 +125,7 @@ public class Inventory extends JPanel implements Runnable {
             frame.setVisible(false);
             alreadyHidden = true;
             alreadyShown = false;
+            saveInventory();
         }
     }
 
@@ -161,6 +176,25 @@ public class Inventory extends JPanel implements Runnable {
             }
         }
         return null;
+    }
+
+    public void saveInventory() {
+        PrintWriter output = null;
+        try {
+            output = new PrintWriter("saveFile.csv");
+            output.println("SpotX,SpotY,ItemID,ItemWidth,ItemHeight");
+            for (InventorySquare[] invSpots : inventory) {
+                for (InventorySquare invSpot : invSpots) {
+                    if (invSpot.sprite != null) {
+                        output.println(invSpot.getSpotX() + "," + invSpot.getSpotY() + "," + invSpot.sprite.getItemID()
+                         + "," + invSpot.sprite.itemWidth + "," + invSpot.sprite.itemHeight);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        output.close();
     }
 
 }

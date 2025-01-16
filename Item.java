@@ -74,4 +74,8 @@ public class Item {
         return isGrabbed;
     }
 
+    public int getItemID() {
+        return itemID;
+    }
+
 }

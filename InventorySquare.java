@@ -6,11 +6,11 @@ public class InventorySquare extends JComponent {
     Item sprite;
     boolean grabbed;
 
-    public InventorySquare(int x, int y) {
+    public InventorySquare(int x, int y, int itemID,int width,int height) {
         this.spotX = x;
         this.spotY = y;
         this.grabbed = false;
-        this.sprite = new Item(this, 30, 30, (int) (Math.random() * 3) + 1);
+        this.sprite = new Item(this, width, height, itemID);
 
     }
 
