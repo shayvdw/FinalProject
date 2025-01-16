@@ -30,9 +30,9 @@ public class InventorySquare extends JComponent {
         return spotY;
     }
 
-    public void clicked() {
-        grabbed = !grabbed;
-    }
+    // public void clicked() {
+    //     grabbed = !grabbed;
+    // }
 
     public boolean isGrabbed() {
         return grabbed;
@@ -42,7 +42,7 @@ public class InventorySquare extends JComponent {
         this.sprite = item;
     }
 
-    public Item getItem() {
+    public Item getSprite() {
         return sprite;
     }
 }

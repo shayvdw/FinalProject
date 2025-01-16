@@ -12,6 +12,7 @@ public class Inventory extends JPanel implements Runnable {
 
     InventorySquare[][] inventory = new InventorySquare[8][4];
     InventorySquare foundSquare;
+    InventorySquare transferSquare;
 
     Item heldItem;
 
@@ -66,21 +67,39 @@ public class Inventory extends JPanel implements Runnable {
             } else if (mouse.clicked && !hasFound) {
                 foundSquare = findSquare(mouse.x, mouse.y);
                 if (foundSquare != null) {
-                    foundSquare.clicked();
-                    foundSquare.sprite.clicked();
+                    heldItem = foundSquare.sprite;
+                    foundSquare.setItem(null);
+                    foundSquare.sprite = null;
+                    heldItem.clicked();
+                    heldItem.setSquare(null);
                     hasFound = true;
                     mouse.clicked = false;
+                    System.out.println(foundSquare.getX() + ", " + foundSquare.getY());
                 }
             } else if (mouse.clicked && hasFound) {
-                foundSquare.clicked();
-                foundSquare.sprite.clicked();
-                foundSquare.sprite.updateItem();
-                hasFound = false;
+                transferSquare = findSquare(mouse.x, mouse.y);
+                if (transferSquare != null && transferSquare != foundSquare) {
+                    System.out.println(foundSquare.getX() + ", " + foundSquare.getY());
+                    System.out.println("transefer" + transferSquare.getX() + ", " + transferSquare.getY());
+                    Item temp = transferSquare.sprite;
+                    heldItem.clicked();
+                    heldItem.setSquare(transferSquare);
+                    transferSquare.setItem(heldItem);
+                    heldItem = temp;
+                    heldItem.clicked();
+                    heldItem.setSquare(null);
+                } else {
+                    System.out.println(foundSquare.getX() + ", " + foundSquare.getY());
+                    heldItem.clicked();
+                    heldItem.setSquare(foundSquare);
+                    heldItem.updateItem();
+                    foundSquare.setItem(heldItem);
+                    heldItem = null;
+                    hasFound = false;
+                }
                 mouse.clicked = false;
                 repaint();
             } else if (hasFound) {
-                // foundSquare.setSpotY(mouse.y - 20);
-                // foundSquare.setSpotX(mouse.x - 20);
                 repaint();
             }
 
@@ -115,8 +134,20 @@ public class Inventory extends JPanel implements Runnable {
                     g.setColor(Color.BLACK);
                 }
                 g.fillRect(invSpot.getSpotX(), invSpot.getSpotY(), 40, 40);
-                invSpot.sprite.drawItem(g, mouse.x, mouse.y);
             }
+        }
+        for (InventorySquare[] invSpots : inventory) {
+            for (InventorySquare invSpot : invSpots) {
+                if (invSpot.sprite != null) {
+                    invSpot.sprite.drawItem(g, mouse.x, mouse.y);
+                }
+                if (invSpot.sprite != null && invSpot.sprite != heldItem) {
+                    invSpot.sprite.drawItem(g, invSpot.getSpotX(), invSpot.getSpotY());
+                }
+            }
+        }
+        if (heldItem != null) {
+            heldItem.drawItem(g, mouse.x, mouse.y);
         }
     }
 
