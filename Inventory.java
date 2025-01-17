@@ -138,7 +138,7 @@ public class Inventory extends JPanel implements Runnable {
     }
 
     public void paintComponent(Graphics g) {
-        g.setColor(Color.WHITE);
+        g.setColor(Color.GRAY);
         g.fillRect(0, 0, width, height);
         g.setColor(Color.BLACK);
         for (InventorySquare[] invSpots : inventory) {

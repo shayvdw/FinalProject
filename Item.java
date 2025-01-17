@@ -9,10 +9,10 @@ public class Item {
 
     int itemWidth;
     int itemHeight;
-
     int itemID;
 
     boolean isGrabbed;
+    boolean isHeld;
 
     public Item(InventorySquare square, int itemWidth, int itemHeight, int itemID) {
         this.square = square;
@@ -21,7 +21,11 @@ public class Item {
         this.itemID = itemID;
         this.itemX = square.getSpotX() + (40 - itemWidth) / 2;
         this.itemY = square.getSpotY() + (40 - itemHeight) / 2;
-
+        if(square != null){
+            this.isHeld = true;
+        }else{
+            this.isHeld = false;
+        }
     }
 
     public void setSquare(InventorySquare square) {
@@ -43,6 +47,10 @@ public class Item {
                 g.fillRect(itemX, itemY, itemWidth, itemHeight);
             }
         }
+    }
+
+    public boolean isHeld(){
+        return isHeld;
     }
 
     public void setItemX(int itemX) {

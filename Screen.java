@@ -5,14 +5,22 @@ import javax.swing.JPanel;
 public class Screen extends JPanel implements Runnable {
     int width = 500;
     int height = 500;
+
     JFrame frame = new JFrame();
+
     Keyboard k = new Keyboard();
-    Inventory i = new Inventory();
     MapMouse mouse = new MapMouse();
 
+    Inventory i = new Inventory();
+
+    Player player;
+
+    int playerSpeed = 5;
+
     public Screen() {
+        player = new Player(width / 2, height / 2);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
+
         frame.setUndecorated(true);
         frame.setLocationRelativeTo(null);
 
@@ -43,25 +51,26 @@ public class Screen extends JPanel implements Runnable {
                 e.printStackTrace();
             }
             if (k.forward) {
-                // System.out.println("Forward");
-                k.forward = false;
-            } else if (k.backward) {
-                // System.out.println("Backward");
-                k.backward = false;
-            } else if (k.left) {
-                // System.out.println("Left");
-                k.left = false;
-            } else if (k.right) {
-                // System.out.println("Right");
-                k.right = false;
-            } else if (k.inv) {
+                player.move(0, -playerSpeed);
+            }
+            if (k.backward) {
+                player.move(0, playerSpeed);
+            }
+            if (k.left) {
+                player.move(-playerSpeed, 0);
+            }
+            if (k.right) {
+                player.move(playerSpeed, 0);
+            }
+            if (k.inv) {
                 if (i.alreadyHidden) {
                     i.show();
-                }else {
+                } else {
                     i.hide();
                 }
                 k.inv = false;
-            } else if (k.fullScreen) {
+            }
+            if (k.fullScreen) {
                 if (frame.getExtendedState() == JFrame.MAXIMIZED_BOTH) {
                     SmallScreen();
                 } else {
@@ -69,9 +78,13 @@ public class Screen extends JPanel implements Runnable {
                 }
                 k.fullScreen = false;
             }
+            repaint();
+            k.forward = false;
+            k.backward = false;
+            k.left = false;
+            k.right = false;
         }
     }
-
 
     public void BigScreen() {
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -82,7 +95,9 @@ public class Screen extends JPanel implements Runnable {
     }
 
     public void paintComponent(Graphics g) {
-        g.fillRect(10, 10, 100, 100);
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, 10000, 10000);
+        player.drawPlayer(g);
     }
 
 }
