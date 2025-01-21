@@ -4,15 +4,15 @@ import java.awt.Graphics;
 public class Item {
     InventorySquare square;
 
-    int itemX;
-    int itemY;
+    private int itemX;
+    private int itemY;
 
-    int itemWidth;
-    int itemHeight;
-    int itemID;
+    private int itemWidth;
+    private int itemHeight;
+    private int itemID;
 
-    boolean isGrabbed;
-    boolean isHeld;
+    private boolean isGrabbed;
+    private boolean isHeld;
 
     public Item(InventorySquare square, int itemWidth, int itemHeight, int itemID) {
         this.square = square;
@@ -27,11 +27,11 @@ public class Item {
             this.isHeld = false;
         }
     }
-
+    //set the square of the item
     public void setSquare(InventorySquare square) {
         this.square = square;
     }
-
+    //draws item depending on the itemID
     public void drawItem(Graphics g, int MouseX, int MouseY) {
         if (itemID == 1) {
             g.setColor(Color.RED);
@@ -48,42 +48,50 @@ public class Item {
             }
         }
     }
-
+    //returns if the item is held
     public boolean isHeld(){
         return isHeld;
     }
-
+    //sets the X of the item
     public void setItemX(int itemX) {
         this.itemX = itemX;
     }
-
+    //sets the Y of the item
     public void setItemY(int itemY) {
         this.itemY = itemY;
     }
-
+    //for snapping items to the inventory
     public void updateItem() {
         itemX = square.getSpotX() + (40 - itemWidth) / 2;
         itemY = square.getSpotY() + (40 - itemHeight) / 2;
     }
-
+    //returns the x position of the item
     public int getItemX() {
         return itemX;
     }
-
+    //returns the y position of the item
     public int getItemY() {
         return itemY;
     }
-
+    //toggles the isGrabbed boolean
     public void clicked() {
         isGrabbed = !isGrabbed;
     }
-
+    //returns the isGrabbed boolean
     public boolean isGrabbed() {
         return isGrabbed;
     }
-
+    //returns the itemID
     public int getItemID() {
         return itemID;
     }
+    //returns the width of the item
+    public int getItemWidth() {
+        return itemWidth;
+    }
+    //returns the height of the item
+    public int getItemHeight() {
+        return itemHeight;
+    } 
 
 }

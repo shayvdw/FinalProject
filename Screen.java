@@ -1,4 +1,11 @@
+/*
+ * is the main game loop
+ * uses thread so mutiple parts of game can run at once
+ */
 import java.awt.*;
+import java.util.Scanner;
+import java.io.File;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -9,15 +16,41 @@ public class Screen extends JPanel implements Runnable {
     JFrame frame = new JFrame();
 
     Keyboard k = new Keyboard();
-    MapMouse mouse = new MapMouse();
+    Mouse mouse = new Mouse();
 
-    Inventory i = new Inventory();
+    Inventory i;
+
+    InventorySquare[][] inventory = new InventorySquare[8][4];
 
     Player player;
 
     int playerSpeed = 5;
 
     public Screen() {
+        //reads in save file to make inventory
+        Scanner input = null;
+        try{
+            input = new Scanner(new File("SaveFile.csv"));
+            input.nextLine();
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        for (int i = 0; i < inventory.length; i++) {
+            for (int j = 0; j < inventory[0].length; j++) {
+                String dataline = input.nextLine();
+                String[] data = dataline.split(",");
+                int xPos = Integer.parseInt(data[0]);
+                int yPos = Integer.parseInt(data[1]);
+                int id = Integer.parseInt(data[2]);
+                int width = Integer.parseInt(data[3]);
+                int height = Integer.parseInt(data[4]);
+                inventory[i][j] = new InventorySquare(xPos,yPos,id,width,height);
+                this.add(inventory[i][j]);
+            }
+        }
+
+        i = new Inventory(inventory);
+
         player = new Player(width / 2, height / 2);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

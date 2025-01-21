@@ -1,5 +1,12 @@
-import javax.swing.*;
 
+/*
+ * the inventrory class
+ * runs on a seperate thread
+ * allows for items to be moved around in the inventory
+ * saves item to file after closing inventory
+ * connected to the screen class
+ */
+import javax.swing.*;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.GridLayout;
@@ -13,7 +20,7 @@ public class Inventory extends JPanel implements Runnable {
 
     JFrame frame = new JFrame();
 
-    InventorySquare[][] inventory = new InventorySquare[8][4];
+    InventorySquare[][] inventory;
     InventorySquare foundSquare;
 
     Item heldItem;
@@ -23,32 +30,15 @@ public class Inventory extends JPanel implements Runnable {
     boolean hasFound = false;
 
     Keyboard k = new Keyboard();
-    InvMouse mouse = new InvMouse();
+    Mouse mouse = new Mouse();
 
-    public Inventory() {
+    // constructor for the inventory
+    // connects the inventory array to the screen
+    public Inventory(InventorySquare[][] a) {
         this.setLayout(new GridLayout(8, 4));
         frame.setLayout(null);
         this.setBounds(0, 0, width, height);
-        Scanner input = null;
-        try{
-            input = new Scanner(new File("SaveFile.csv"));
-            input.nextLine();
-        } catch(Exception e){
-            e.printStackTrace();
-        }
-        for (int i = 0; i < inventory.length; i++) {
-            for (int j = 0; j < inventory[0].length; j++) {
-                String dataline = input.nextLine();
-                String[] data = dataline.split(",");
-                int xPos = Integer.parseInt(data[0]);
-                int yPos = Integer.parseInt(data[1]);
-                int id = Integer.parseInt(data[2]);
-                int width = Integer.parseInt(data[3]);
-                int height = Integer.parseInt(data[4]);
-                inventory[i][j] = new InventorySquare(xPos,yPos,id,width,height);
-                this.add(inventory[i][j]);
-            }
-        }
+        inventory = a;
 
         frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         frame.add(this);
@@ -64,6 +54,7 @@ public class Inventory extends JPanel implements Runnable {
         frame.addMouseMotionListener(mouse);
     }
 
+    // starts the inventory thread
     public void startInventoryThread() {
         Thread inventoryThread = new Thread(this);
         inventoryThread.start();
@@ -72,28 +63,34 @@ public class Inventory extends JPanel implements Runnable {
     public void run() {
         while (true) {
             try {
+                // 60 fps so my computer doesn't explode
                 Thread.sleep(1000 / 60);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            // allows inventory to close itself
             if (k.closeInv && alreadyShown) {
                 hide();
                 k.closeInv = false;
-            } else if (mouse.clicked && !hasFound) {
+            }
+            //when the mouse is clicked finds the square that was clicked if one was clicked
+            if (mouse.clicked && !hasFound) {
                 foundSquare = findSquare(mouse.x, mouse.y);
                 if (foundSquare != null) {
-                    heldItem = foundSquare.sprite;
+                    heldItem = foundSquare.getItem();
                     foundSquare.setItem(null);
-                    foundSquare.sprite = null;
+                    foundSquare.setItem(null);
                     heldItem.clicked();
                     heldItem.setSquare(null);
                     hasFound = true;
-                    mouse.clicked = false;
                 }
-            } else if (mouse.clicked && hasFound) {
+                mouse.clicked = false;
+            } 
+            // transfers held item to new square if one is clicked else send back to original square
+            else if (mouse.clicked && hasFound) {
                 InventorySquare transferSquare = findSquare(mouse.x, mouse.y);
                 if (transferSquare != null && transferSquare != foundSquare) {
-                    Item temp = transferSquare.sprite;
+                    Item temp = transferSquare.getItem();
                     heldItem.clicked();
                     heldItem.setSquare(transferSquare);
                     transferSquare.setItem(heldItem);
@@ -119,7 +116,7 @@ public class Inventory extends JPanel implements Runnable {
 
         }
     }
-
+    // hides the inventory
     public void hide() {
         if (!alreadyHidden) {
             frame.setVisible(false);
@@ -128,7 +125,7 @@ public class Inventory extends JPanel implements Runnable {
             saveInventory();
         }
     }
-
+    //shows the inventory
     public void show() {
         if (!alreadyShown) {
             frame.setVisible(true);
@@ -136,28 +133,20 @@ public class Inventory extends JPanel implements Runnable {
             alreadyShown = true;
         }
     }
-
+    //paints the inventory
     public void paintComponent(Graphics g) {
         g.setColor(Color.GRAY);
         g.fillRect(0, 0, width, height);
         g.setColor(Color.BLACK);
         for (InventorySquare[] invSpots : inventory) {
             for (InventorySquare invSpot : invSpots) {
-                if (invSpot.isGrabbed()) {
-                    g.setColor(Color.RED);
-                } else {
-                    g.setColor(Color.BLACK);
-                }
                 g.fillRect(invSpot.getSpotX(), invSpot.getSpotY(), 40, 40);
             }
         }
         for (InventorySquare[] invSpots : inventory) {
             for (InventorySquare invSpot : invSpots) {
-                if (invSpot.sprite != null) {
-                    invSpot.sprite.drawItem(g, mouse.x, mouse.y);
-                }
-                if (invSpot.sprite != null && invSpot.sprite != heldItem) {
-                    invSpot.sprite.drawItem(g, invSpot.getSpotX(), invSpot.getSpotY());
+                if (invSpot.getItem() != null && invSpot.getItem() != heldItem) {
+                    invSpot.getItem().drawItem(g, invSpot.getSpotX(), invSpot.getSpotY());
                 }
             }
         }
@@ -165,7 +154,7 @@ public class Inventory extends JPanel implements Runnable {
             heldItem.drawItem(g, mouse.x, mouse.y);
         }
     }
-
+    //finds a square given x and y cordinates
     public InventorySquare findSquare(int x, int y) {
         for (InventorySquare[] invSpots : inventory) {
             for (InventorySquare invSpot : invSpots) {
@@ -177,7 +166,7 @@ public class Inventory extends JPanel implements Runnable {
         }
         return null;
     }
-
+    //saves all inventory data to a file
     public void saveInventory() {
         PrintWriter output = null;
         try {
@@ -185,9 +174,10 @@ public class Inventory extends JPanel implements Runnable {
             output.println("SpotX,SpotY,ItemID,ItemWidth,ItemHeight");
             for (InventorySquare[] invSpots : inventory) {
                 for (InventorySquare invSpot : invSpots) {
-                    if (invSpot.sprite != null) {
-                        output.println(invSpot.getSpotX() + "," + invSpot.getSpotY() + "," + invSpot.sprite.getItemID()
-                         + "," + invSpot.sprite.itemWidth + "," + invSpot.sprite.itemHeight);
+                    if (invSpot.getItem() != null) {
+                        output.println(invSpot.getSpotX() + "," + invSpot.getSpotY() + ","
+                                + invSpot.getItem().getItemID()
+                                + "," + invSpot.getItem().getItemWidth() + "," + invSpot.getItem().getItemHeight());
                     }
                 }
             }

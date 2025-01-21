@@ -1,14 +1,18 @@
+/*
+ * mouse listener for the "game"
+ * uses booleans as the changes are applied in the game loop
+ */
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-public class InvMouse implements MouseListener, MouseMotionListener {
+public class Mouse implements MouseListener, MouseMotionListener {
 
     boolean clicked;
     int x;
     int y;
 
-    public InvMouse() {
+    public Mouse() {
         clicked = false;
     }
 
