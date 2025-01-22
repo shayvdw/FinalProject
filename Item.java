@@ -28,7 +28,7 @@ public class Item {
         }
     }
     //set the square of the item
-    public void setSquare(InventorySquare square) {
+    public void setSquare(Square square) {
         this.square = square;
     }
     //draws item depending on the itemID
@@ -51,6 +51,10 @@ public class Item {
     //returns if the item is in the inventory
     public boolean isHeld(){
         return isHeld;
+    }
+
+    public void hold(){
+        isHeld = !isHeld;
     }
     //sets the X of the item
     public void setItemX(int itemX) {

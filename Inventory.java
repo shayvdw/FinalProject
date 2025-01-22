@@ -24,6 +24,7 @@ public class Inventory extends JPanel implements Runnable {
     InventorySquare foundSquare;
 
     Item heldItem;
+    Item drop = null;
 
     boolean alreadyHidden = true;
     boolean alreadyShown = false;
@@ -73,7 +74,8 @@ public class Inventory extends JPanel implements Runnable {
                 hide();
                 k.closeInv = false;
             }
-            //when the mouse is clicked finds the square that was clicked if one was clicked
+            // when the mouse is clicked finds the square that was clicked if one was
+            // clicked
             if (mouse.clicked && !hasFound) {
                 foundSquare = findSquare(mouse.x, mouse.y);
                 if (foundSquare != null) {
@@ -85,8 +87,9 @@ public class Inventory extends JPanel implements Runnable {
                     hasFound = true;
                 }
                 mouse.clicked = false;
-            } 
-            // transfers held item to new square if one is clicked else send back to original square
+            }
+            // transfers held item to new square if one is clicked else send back to
+            // original square
             else if (mouse.clicked && hasFound) {
                 InventorySquare transferSquare = findSquare(mouse.x, mouse.y);
                 if (transferSquare != null && transferSquare != foundSquare) {
@@ -102,9 +105,10 @@ public class Inventory extends JPanel implements Runnable {
                     foundSquare = null;
                 } else {
                     heldItem.clicked();
-                    heldItem.setSquare(foundSquare);
-                    heldItem.updateItem();
-                    foundSquare.setItem(heldItem);
+                    heldItem.setSquare(null);
+                    heldItem.hold();
+                    drop = heldItem;
+                    foundSquare.setItem(null);
                     heldItem = null;
                 }
                 hasFound = false;
@@ -116,6 +120,7 @@ public class Inventory extends JPanel implements Runnable {
 
         }
     }
+
     // hides the inventory
     public void hide() {
         if (!alreadyHidden) {
@@ -125,7 +130,8 @@ public class Inventory extends JPanel implements Runnable {
             saveInventory();
         }
     }
-    //shows the inventory
+
+    // shows the inventory
     public void show() {
         if (!alreadyShown) {
             frame.setVisible(true);
@@ -133,7 +139,8 @@ public class Inventory extends JPanel implements Runnable {
             alreadyShown = true;
         }
     }
-    //paints the inventory
+
+    // paints the inventory
     public void paintComponent(Graphics g) {
         g.setColor(Color.GRAY);
         g.fillRect(0, 0, width, height);
@@ -154,7 +161,8 @@ public class Inventory extends JPanel implements Runnable {
             heldItem.drawItem(g, mouse.x, mouse.y);
         }
     }
-    //finds a square given x and y cordinates
+
+    // finds a square given x and y cordinates
     public InventorySquare findSquare(int x, int y) {
         for (InventorySquare[] invSpots : inventory) {
             for (InventorySquare invSpot : invSpots) {
@@ -166,7 +174,8 @@ public class Inventory extends JPanel implements Runnable {
         }
         return null;
     }
-    //saves all inventory data to a file
+
+    // saves all inventory data to a file
     public void saveInventory() {
         PrintWriter output = null;
         try {
@@ -177,7 +186,12 @@ public class Inventory extends JPanel implements Runnable {
                     if (invSpot.getItem() != null) {
                         output.println(invSpot.getSpotX() + "," + invSpot.getSpotY() + ","
                                 + invSpot.getItem().getItemID()
-                                + "," + invSpot.getItem().getItemWidth() + "," + invSpot.getItem().getItemHeight());
+                                + "," + invSpot.getItem().getItemWidth() + ","
+                                + invSpot.getItem().getItemHeight() + "," + invSpot.getItem().isHeld());
+                    } else {
+                        output.println(invSpot.getSpotX() + "," + invSpot.getSpotY() + "," + 0
+                                + "," + 0 + "," + 0 + "," + null);
+
                     }
                 }
             }
@@ -187,4 +201,11 @@ public class Inventory extends JPanel implements Runnable {
         output.close();
     }
 
+    public Item droppedItem() {
+        return drop;
+    }
+
+    public void deleteItem() {
+        drop = null;
+    }
 }

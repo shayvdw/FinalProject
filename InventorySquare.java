@@ -11,9 +11,11 @@ public class InventorySquare extends Square {
     private int spotY;
     private Item item;
 
-    public InventorySquare(int spotX, int SpotY, int gridX, int gridY, int itemID,int width,int height) {
+    public InventorySquare(boolean hasItem, int spotX, int SpotY, int gridX, int gridY, int itemID,int width,int height) {
         super(spotX, SpotY, gridX, gridY);
+        if(hasItem){
         this.item = new Item(this, width, height, itemID);
+        }
 
     }
     //sets the item in the square

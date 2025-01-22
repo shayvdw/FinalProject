@@ -46,11 +46,12 @@ public class Screen extends JPanel implements Runnable {
                 int id = Integer.parseInt(data[2]);
                 int width = Integer.parseInt(data[3]);
                 int height = Integer.parseInt(data[4]);
-                inventory[i][j] = new InventorySquare(xPos,yPos,xPos/50,yPos/50,id,width,height);
+                boolean hasItem = Boolean.parseBoolean(data[5]);
+                inventory[i][j] = new InventorySquare(hasItem, xPos,yPos,xPos/50,yPos/50,id,width,height);
                 this.add(inventory[i][j]);
             }
         }
-        map = new MapTile[100][100];
+        map = new MapTile[35][50];
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
                 map[i][j] = new MapTile(false,i*40, j*40,i,j,0,0,0);
@@ -118,6 +119,16 @@ public class Screen extends JPanel implements Runnable {
                     BigScreen();
                 }
                 k.fullScreen = false;
+            }
+            int gridX = player.getX()/40;
+            int gridY = player.getY()/40;
+            // Search 3x3 grid of map tiles around gridX and gridY
+            if(i.droppedItem() != null && !i.droppedItem().isHeld()){
+                map[gridX][gridY].setItem(i.droppedItem());
+                i.droppedItem().setSquare(map[gridX][gridY]);
+                i.droppedItem().updateItem();
+                i.droppedItem().hold();
+                i.deleteItem();
             }
             repaint();
             k.forward = false;
