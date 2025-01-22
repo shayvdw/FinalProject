@@ -2,7 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class Item {
-    InventorySquare square;
+    Square square;
 
     private int itemX;
     private int itemY;
@@ -14,7 +14,7 @@ public class Item {
     private boolean isGrabbed;
     private boolean isHeld;
 
-    public Item(InventorySquare square, int itemWidth, int itemHeight, int itemID) {
+    public Item(Square square, int itemWidth, int itemHeight, int itemID) {
         this.square = square;
         this.itemWidth = itemWidth;
         this.itemHeight = itemHeight;
@@ -48,7 +48,7 @@ public class Item {
             }
         }
     }
-    //returns if the item is held
+    //returns if the item is in the inventory
     public boolean isHeld(){
         return isHeld;
     }

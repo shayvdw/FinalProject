@@ -13,6 +13,8 @@ public class Screen extends JPanel implements Runnable {
     int width = 500;
     int height = 500;
 
+    MapTile[][] map;
+
     JFrame frame = new JFrame();
 
     Keyboard k = new Keyboard();
@@ -44,8 +46,14 @@ public class Screen extends JPanel implements Runnable {
                 int id = Integer.parseInt(data[2]);
                 int width = Integer.parseInt(data[3]);
                 int height = Integer.parseInt(data[4]);
-                inventory[i][j] = new InventorySquare(xPos,yPos,id,width,height);
+                inventory[i][j] = new InventorySquare(xPos,yPos,xPos/50,yPos/50,id,width,height);
                 this.add(inventory[i][j]);
+            }
+        }
+        map = new MapTile[100][100];
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[0].length; j++) {
+                map[i][j] = new MapTile(false,i*40, j*40,i,j,0,0,0);
             }
         }
 
@@ -55,7 +63,7 @@ public class Screen extends JPanel implements Runnable {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         frame.setUndecorated(true);
-        frame.setLocationRelativeTo(null);
+        // frame.setLocationRelativeTo(null);
 
         frame.add(this);
         frame.addKeyListener(k);
@@ -128,8 +136,19 @@ public class Screen extends JPanel implements Runnable {
     }
 
     public void paintComponent(Graphics g) {
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, 10000, 10000);
+        g.clearRect(0, 0, 4000, 4000);
+        for (MapTile[] MapTiles : map) {
+            for (MapTile tile : MapTiles) {
+                tile.drawSquare(g);
+            }
+        }
+        for (MapTile[] MapTiles : map) {
+            for (MapTile tile : MapTiles) {
+                if(tile.getItem() != null){
+                    tile.getItem().drawItem(g, 0, 0);
+                }
+            }
+        }
         player.drawPlayer(g);
     }
 

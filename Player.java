@@ -27,6 +27,6 @@ public Player(int x, int y){
     //draws the player
     public void drawPlayer(Graphics g){
         g.setColor(Color.BLUE);
-        g.fillRect(x, y, 20, 20);
+        g.fillRect(x-10, y-10, 20, 20);
     }
 }
