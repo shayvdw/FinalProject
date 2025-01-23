@@ -7,7 +7,6 @@ import java.awt.*;
 import java.util.Scanner;
 import java.io.File;
 import java.io.PrintWriter;
-import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -55,9 +54,24 @@ public class Screen extends JPanel implements Runnable {
             }
         }
         map = new MapTile[35][45];
+        try {
+            input = new Scanner(new File("MapFile.csv"));
+            input.nextLine();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[0].length; j++) {
-                map[i][j] = new MapTile(false, i * 40, j * 40, i, j, 0, 0, 0);
+            for (int j = 0; j < map[i].length; j++) {
+                String dataline = input.nextLine();
+                String[] data = dataline.split(",");
+                int xPos = Integer.parseInt(data[0]);
+                int yPos = Integer.parseInt(data[1]);
+                int id = Integer.parseInt(data[2]);
+                int width = Integer.parseInt(data[3]);
+                int height = Integer.parseInt(data[4]);
+                boolean hasItem = Boolean.parseBoolean(data[5]);
+                map[i][j] = new MapTile(hasItem, yPos, xPos, xPos / 50, yPos / 50, width, height, id);
+                this.add(map[i][j]);
             }
         }
 
@@ -138,6 +152,14 @@ public class Screen extends JPanel implements Runnable {
                 i.droppedItem().hold();
                 i.deleteItem();
             }
+            if(mouse.clicked){
+                MapTile temp = findMapTile(mouse.x, mouse.y);
+                if(temp.getItem() != null){
+                    i.pickUp(temp.getItem());
+                    temp.setItem(null);
+                }
+                mouse.clicked = false;
+            }
             repaint();
 
             k.forward = false;
@@ -197,5 +219,16 @@ public class Screen extends JPanel implements Runnable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public MapTile findMapTile(int x, int y) {
+        for (MapTile[] tiles : map) {
+            for (MapTile tile : tiles) {
+                if (x > tile.getSpotX() && x < tile.getSpotX() + 40 && y > tile.getSpotY()
+                        && y < tile.getSpotY() + 40) {
+                    return tile;
+                }
+            }
+        }
+        return null;
     }
 }

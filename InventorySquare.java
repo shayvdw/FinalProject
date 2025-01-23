@@ -7,8 +7,6 @@
 
 
 public class InventorySquare extends Square {
-    private int spotX;
-    private int spotY;
     private Item item;
 
     public InventorySquare(boolean hasItem, int spotX, int SpotY, int gridX, int gridY, int itemID,int width,int height) {

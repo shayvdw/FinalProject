@@ -5,7 +5,7 @@ public class MapTile extends Square {
 
     Item item;
 
-    public MapTile(boolean hasItem, int spotY, int spotX, int gridX, int gridY, int itemWidth, int itemHeight,
+    public MapTile(boolean hasItem, int spotX, int spotY, int gridX, int gridY, int itemWidth, int itemHeight,
             int itemID) {
         super(spotY, spotX, gridX, gridY);
         if (hasItem) {
@@ -22,7 +22,7 @@ public class MapTile extends Square {
     }
 
     public void drawSquare(Graphics g) {
-        g.setColor(Color.GREEN);
+        g.setColor(Color.PINK);
         g.fillRect(gridX * 40, gridY * 40, 39, 39);
     }
 }

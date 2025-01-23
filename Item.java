@@ -23,8 +23,6 @@ public class Item {
         this.itemY = square.getGridY();
         if(square != null){
             this.isHeld = true;
-        }else{
-            this.isHeld = false;
         }
     }
     //set the square of the item
