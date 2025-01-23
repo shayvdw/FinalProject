@@ -1,4 +1,4 @@
-SpotX,SpotY,ItemID,ItemWidth,ItemHeight
+SpotX,SpotY,ItemID,ItemWidth,ItemHeight,hasItem
 10,10,1,30,30,true
 10,72,2,30,30,true
 10,134,3,30,30,true
@@ -12,7 +12,7 @@ SpotX,SpotY,ItemID,ItemWidth,ItemHeight
 122,134,3,30,30,true
 122,196,1,30,30,true
 178,10,1,30,30,true
-178,72,0,0,0,null
+178,72,1,30,30,true
 178,134,1,30,30,true
 178,196,1,30,30,true
 234,10,2,30,30,true

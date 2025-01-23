@@ -7,18 +7,10 @@ public class MapTile extends Square {
 
     public MapTile(boolean hasItem, int spotY, int spotX, int gridX, int gridY, int itemWidth, int itemHeight,
             int itemID) {
-        super(spotY, spotY, gridX, gridY);
+        super(spotY, spotX, gridX, gridY);
         if (hasItem) {
             this.item = new Item(this, itemWidth, itemHeight, itemID);
         }
-    }
-
-    public int getGridX() {
-        return gridX;
-    }
-
-    public int getGridY() {
-        return gridY;
     }
 
     public Item getItem() {

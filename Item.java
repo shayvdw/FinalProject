@@ -19,8 +19,8 @@ public class Item {
         this.itemWidth = itemWidth;
         this.itemHeight = itemHeight;
         this.itemID = itemID;
-        this.itemX = square.getSpotX() + (40 - itemWidth) / 2;
-        this.itemY = square.getSpotY() + (40 - itemHeight) / 2;
+        this.itemX = square.getGridX();
+        this.itemY = square.getGridY();
         if(square != null){
             this.isHeld = true;
         }else{
@@ -39,12 +39,14 @@ public class Item {
             g.setColor(Color.GREEN);
         } else if (itemID == 3) {
             g.setColor(Color.BLUE);
+        }else{
+            g.setColor(Color.WHITE);
         }
         if (itemID != 0) {
             if (isGrabbed) {
                 g.fillRect(MouseX - itemWidth / 2, MouseY - itemHeight / 2, itemWidth, itemHeight);
             } else {
-                g.fillRect(itemX, itemY, itemWidth, itemHeight);
+                g.fillRect(square.getSpotX() + (40 - itemWidth)/2, square.getSpotY() + (40 - itemHeight)/2, itemWidth, itemHeight);
             }
         }
     }
@@ -56,18 +58,10 @@ public class Item {
     public void hold(){
         isHeld = !isHeld;
     }
-    //sets the X of the item
-    public void setItemX(int itemX) {
-        this.itemX = itemX;
-    }
-    //sets the Y of the item
-    public void setItemY(int itemY) {
-        this.itemY = itemY;
-    }
     //for snapping items to the inventory
     public void updateItem() {
-        itemX = square.getSpotX() + (40 - itemWidth) / 2;
-        itemY = square.getSpotY() + (40 - itemHeight) / 2;
+        itemX = square.getGridX() + (40 - itemWidth) / 2;
+        itemY = square.getGridY() + (40 - itemHeight) / 2;
     }
     //returns the x position of the item
     public int getItemX() {

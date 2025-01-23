@@ -14,8 +14,10 @@ public class Keyboard implements KeyListener {
     boolean right;
     boolean inv;
     boolean fullScreen;
+    boolean save;
 
     public Keyboard() {
+        save = false;
         closeInv = false;
         forward = false;
         backward = false;
@@ -29,20 +31,30 @@ public class Keyboard implements KeyListener {
     public void keyPressed(KeyEvent e) {
         if(e.getKeyChar() == 'w'){
             this.forward = !forward;
-        } else if(e.getKeyChar() == 's'){
+        }
+        if(e.getKeyChar() == 's'){
             this.backward = !backward;
-        } else if(e.getKeyChar() == 'a'){
+        }
+        if(e.getKeyChar() == 'a'){
             this.left = !left;
-        } else if(e.getKeyChar() == 'd'){
+        }
+        if(e.getKeyChar() == 'd'){
             this.right = !right;
-        } else if(e.getKeyChar() == 'i'){
+        }
+        if(e.getKeyChar() == 'i'){
             this.inv = !inv;
-        } else if(e.getKeyChar() == 'e'){
+        }
+        if(e.getKeyChar() == 'e'){
             this.closeInv = !closeInv;
-        } else if(e.getKeyChar() == 'q'){
+        }
+        if(e.getKeyChar() == 'q'){
             System.exit(0);
-        } else if(e.getKeyChar() == 'f'){
+        }
+        if(e.getKeyChar() == 'f'){
             this.fullScreen = !fullScreen;
+        }
+        if(e.getKeyChar() == 'o'){
+            this.save = true;
         }
     }
 

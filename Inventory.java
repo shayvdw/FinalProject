@@ -10,9 +10,7 @@ import javax.swing.*;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.GridLayout;
-import java.io.File;
 import java.io.PrintWriter;
-import java.util.Scanner;
 
 public class Inventory extends JPanel implements Runnable {
     int width = 450;
@@ -74,8 +72,7 @@ public class Inventory extends JPanel implements Runnable {
                 hide();
                 k.closeInv = false;
             }
-            // when the mouse is clicked finds the square that was clicked if one was
-            // clicked
+            // when the mouse is clicked finds the square that was clicked if one was clicked
             if (mouse.clicked && !hasFound) {
                 foundSquare = findSquare(mouse.x, mouse.y);
                 if (foundSquare != null) {
@@ -180,7 +177,7 @@ public class Inventory extends JPanel implements Runnable {
         PrintWriter output = null;
         try {
             output = new PrintWriter("saveFile.csv");
-            output.println("SpotX,SpotY,ItemID,ItemWidth,ItemHeight");
+            output.println("SpotX,SpotY,ItemID,ItemWidth,ItemHeight,hasItem");
             for (InventorySquare[] invSpots : inventory) {
                 for (InventorySquare invSpot : invSpots) {
                     if (invSpot.getItem() != null) {

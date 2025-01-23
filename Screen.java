@@ -1,3 +1,4 @@
+
 /*
  * is the main game loop
  * uses thread so mutiple parts of game can run at once
@@ -5,6 +6,8 @@
 import java.awt.*;
 import java.util.Scanner;
 import java.io.File;
+import java.io.PrintWriter;
+import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -29,12 +32,12 @@ public class Screen extends JPanel implements Runnable {
     int playerSpeed = 5;
 
     public Screen() {
-        //reads in save file to make inventory
+        // reads in save file to make inventory
         Scanner input = null;
-        try{
+        try {
             input = new Scanner(new File("SaveFile.csv"));
             input.nextLine();
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         for (int i = 0; i < inventory.length; i++) {
@@ -47,14 +50,14 @@ public class Screen extends JPanel implements Runnable {
                 int width = Integer.parseInt(data[3]);
                 int height = Integer.parseInt(data[4]);
                 boolean hasItem = Boolean.parseBoolean(data[5]);
-                inventory[i][j] = new InventorySquare(hasItem, xPos,yPos,xPos/50,yPos/50,id,width,height);
+                inventory[i][j] = new InventorySquare(hasItem, xPos, yPos, xPos / 50, yPos / 50, id, width, height);
                 this.add(inventory[i][j]);
             }
         }
-        map = new MapTile[35][50];
+        map = new MapTile[35][45];
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
-                map[i][j] = new MapTile(false,i*40, j*40,i,j,0,0,0);
+                map[i][j] = new MapTile(false, i * 40, j * 40, i, j, 0, 0, 0);
             }
         }
 
@@ -120,10 +123,15 @@ public class Screen extends JPanel implements Runnable {
                 }
                 k.fullScreen = false;
             }
-            int gridX = player.getX()/40;
-            int gridY = player.getY()/40;
+            if (k.save) {
+                saveFile();
+                k.save = false;
+            }
+            int gridX = player.getX() / 40;
+            int gridY = player.getY() / 40;
+            // System.out.println(gridX + ", " + gridY);
             // Search 3x3 grid of map tiles around gridX and gridY
-            if(i.droppedItem() != null && !i.droppedItem().isHeld()){
+            if (i.droppedItem() != null && !i.droppedItem().isHeld()) {
                 map[gridX][gridY].setItem(i.droppedItem());
                 i.droppedItem().setSquare(map[gridX][gridY]);
                 i.droppedItem().updateItem();
@@ -131,6 +139,7 @@ public class Screen extends JPanel implements Runnable {
                 i.deleteItem();
             }
             repaint();
+
             k.forward = false;
             k.backward = false;
             k.left = false;
@@ -155,7 +164,7 @@ public class Screen extends JPanel implements Runnable {
         }
         for (MapTile[] MapTiles : map) {
             for (MapTile tile : MapTiles) {
-                if(tile.getItem() != null){
+                if (tile.getItem() != null) {
                     tile.getItem().drawItem(g, 0, 0);
                 }
             }
@@ -163,4 +172,30 @@ public class Screen extends JPanel implements Runnable {
         player.drawPlayer(g);
     }
 
+    public void saveFile() {
+        System.out.println("test");
+        PrintWriter output = null;
+        try {
+            output = new PrintWriter("MapFile.csv");
+            output.println("SpotX,SpotY,ItemID,ItemWidth,ItemHeight,hasItem");
+            for (int i = 0; i < 35; i++) {
+                for (int j = 0; j < map[i].length; j++) {
+                    MapTile tile = map[i][j];
+                    if (tile.getItem() != null) {
+                        output.println(tile.getSpotX() + "," + tile.getSpotY() + ","
+                                + tile.getItem().getItemID()
+                                + "," + tile.getItem().getItemWidth() + ","
+                                + tile.getItem().getItemHeight() + "," + tile.getItem().isHeld());
+                    } else {
+                        output.println(tile.getSpotX() + "," + tile.getSpotY() + "," + 0
+                                + "," + 0 + "," + 0 + "," + null);
+
+                    }
+                }
+            }
+            output.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
