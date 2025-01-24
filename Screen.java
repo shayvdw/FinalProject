@@ -195,12 +195,11 @@ public class Screen extends JPanel implements Runnable {
     }
 
     public void saveFile() {
-        System.out.println("test");
         PrintWriter output = null;
         try {
             output = new PrintWriter("MapFile.csv");
             output.println("SpotX,SpotY,ItemID,ItemWidth,ItemHeight,hasItem");
-            for (int i = 0; i < 35; i++) {
+            for (int i = 0; i < map.length; i++) {
                 for (int j = 0; j < map[i].length; j++) {
                     MapTile tile = map[i][j];
                     if (tile.getItem() != null) {

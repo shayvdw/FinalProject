@@ -72,25 +72,30 @@ public class Inventory extends JPanel implements Runnable {
                 hide();
                 k.closeInv = false;
             }
-            // when the mouse is clicked finds the square that was clicked if one was clicked
+            // when the mouse is clicked finds the square that was clicked if one was
+            // clicked
             if (mouse.clicked && !hasFound) {
                 foundSquare = findSquare(mouse.x, mouse.y);
-                if (foundSquare != null && heldItem == null) {
+                if (foundSquare != null && heldItem == null && foundSquare.getItem() != null) {
                     heldItem = foundSquare.getItem();
                     foundSquare.setItem(null);
                     heldItem.clicked();
                     heldItem.setSquare(null);
                     hasFound = true;
-                }else if(foundSquare != null){
+                } else if (foundSquare != null && heldItem != null) {
                     Item temp = foundSquare.getItem();
                     heldItem.clicked();
                     heldItem.setSquare(foundSquare);
                     foundSquare.setItem(heldItem);
                     foundSquare.getItem().updateItem();
-                    heldItem = temp;
-                    heldItem.clicked();
-                    temp = null;
-                } else if(heldItem != null && foundSquare == null){
+                    if (temp != null) {
+                        heldItem = temp;
+                        heldItem.clicked();
+                        temp = null;
+                    } else {
+                        heldItem = null;
+                    }
+                } else if (heldItem != null && foundSquare == null) {
                     heldItem.clicked();
                     heldItem.hold();
                     drop = heldItem;
@@ -106,14 +111,17 @@ public class Inventory extends JPanel implements Runnable {
                     Item temp = transferSquare.getItem();
                     heldItem.clicked();
                     heldItem.setSquare(transferSquare);
-                    transferSquare.setItem(heldItem);
-                    temp.setSquare(foundSquare);
-                    temp.updateItem();
                     heldItem.updateItem();
-                    foundSquare.setItem(temp);
-                    heldItem = null;
-                    foundSquare = null;
-                } else{
+                    transferSquare.setItem(heldItem);
+                    if (temp != null) {
+                        temp.setSquare(foundSquare);
+                        temp.updateItem();
+                        foundSquare.setItem(temp);
+                    }
+                        heldItem = null;
+                        foundSquare = null;
+                        transferSquare = null;
+                } else {
                     heldItem.clicked();
                     heldItem.setSquare(null);
                     heldItem.hold();
@@ -170,7 +178,7 @@ public class Inventory extends JPanel implements Runnable {
         }
     }
 
-    public void pickUp(Item item){
+    public void pickUp(Item item) {
         this.show();
         item.setSquare(null);
         heldItem = item;
