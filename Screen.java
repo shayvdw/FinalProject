@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+
 public class Screen extends JPanel implements Runnable {
     int width = 500;
     int height = 500;
@@ -154,7 +155,7 @@ public class Screen extends JPanel implements Runnable {
             }
             if(mouse.clicked){
                 MapTile temp = findMapTile(mouse.x, mouse.y);
-                if(temp.getItem() != null){
+                if(temp.getItem() != null && temp != null){
                     i.pickUp(temp.getItem());
                     temp.setItem(null);
                 }
@@ -193,7 +194,10 @@ public class Screen extends JPanel implements Runnable {
         }
         player.drawPlayer(g);
     }
-
+    /*
+     * save the item info of all the items stored by maptiles
+     * writes all data to file called MapFIle.csv
+     */
     public void saveFile() {
         PrintWriter output = null;
         try {
@@ -219,6 +223,13 @@ public class Screen extends JPanel implements Runnable {
             e.printStackTrace();
         }
     }
+    /**
+ * Searches for a MapTile object within the map array that contains the given x and y coordinates.
+ * 
+ * @param x The x-coordinate to search for within the map tiles.
+ * @param y The y-coordinate to search for within the map tiles.
+ * @return The MapTile object that contains the given coordinates, or null if no such tile is found.
+ */
     public MapTile findMapTile(int x, int y) {
         for (MapTile[] tiles : map) {
             for (MapTile tile : tiles) {

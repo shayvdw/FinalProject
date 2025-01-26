@@ -138,6 +138,7 @@ public class Inventory extends JPanel implements Runnable {
     }
 
     // hides the inventory
+    //saves inventory
     public void hide() {
         if (!alreadyHidden) {
             frame.setVisible(false);
@@ -199,7 +200,10 @@ public class Inventory extends JPanel implements Runnable {
         return null;
     }
 
-    // saves all inventory data to a file
+    /**
+     * saves all inventory item data to a file
+     *  file is called saveFile.csv
+     */ 
     public void saveInventory() {
         PrintWriter output = null;
         try {
@@ -224,11 +228,11 @@ public class Inventory extends JPanel implements Runnable {
         }
         output.close();
     }
-
+    //returns item that was dropped
     public Item droppedItem() {
         return drop;
     }
-
+    //turns dropped item to null
     public void deleteItem() {
         drop = null;
     }

@@ -1,6 +1,15 @@
 import java.awt.Color;
 import java.awt.Graphics;
 
+/**
+ * Draws the item.
+ * The color of the item depends on its itemID.
+ * The item is drawn on the inventory square or at the mouse position depending on whether it is held.
+ *
+ * @param g the Graphics object used for drawing
+ * @param MouseX the x-coordinate of the mouse, used if the item is held
+ * @param MouseY the y-coordinate of the mouse, used if the item is held
+ */
 public class Item {
     Square square;
 
@@ -29,7 +38,14 @@ public class Item {
     public void setSquare(Square square) {
         this.square = square;
     }
-    //draws item depending on the itemID
+    /**
+     * draws the item
+     * Color depends on itemID
+     * the item is drawn on the inventory square or mouse depending on if its held
+     * @param MouseX the x-coordinate of the mouse, used if the item is held
+     * @param MouseY the y-coordinate of the mouse, used if the item is held
+     * @param g the graphic object used
+     */
     public void drawItem(Graphics g, int MouseX, int MouseY) {
         if (itemID == 1) {
             g.setColor(Color.RED);
@@ -52,7 +68,7 @@ public class Item {
     public boolean isHeld(){
         return isHeld;
     }
-
+    //is used to tell if item is in inventory
     public void hold(){
         isHeld = !isHeld;
     }
@@ -73,7 +89,7 @@ public class Item {
     public void clicked() {
         isGrabbed = !isGrabbed;
     }
-    //returns the isGrabbed boolean
+    //return whether the item is grabbed or not
     public boolean isGrabbed() {
         return isGrabbed;
     }

@@ -275,7 +275,7 @@ SpotX,SpotY,ItemID,ItemWidth,ItemHeight,hasItem
 240,120,0,0,0,null
 240,160,0,0,0,null
 240,200,0,0,0,null
-240,240,1,30,30,true
+240,240,0,0,0,null
 240,280,0,0,0,null
 240,320,0,0,0,null
 240,360,0,0,0,null
@@ -365,7 +365,7 @@ SpotX,SpotY,ItemID,ItemWidth,ItemHeight,hasItem
 320,120,0,0,0,null
 320,160,0,0,0,null
 320,200,0,0,0,null
-320,240,0,0,0,null
+320,240,1,30,30,true
 320,280,0,0,0,null
 320,320,0,0,0,null
 320,360,0,0,0,null
